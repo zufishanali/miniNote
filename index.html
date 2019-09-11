@@ -7,7 +7,7 @@
 </head>
 
 <body>
-  <!-- This is a comment -->
+  <h2>Welcome to mini note! Ctrl+s to save</h2>
   <div id="note" contenteditable></div>
   <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
   <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
@@ -16,7 +16,7 @@
 
     window.addEventListener('DOMContentLoaded', (event) => {
       fs.readFile('/note', 'utf8', (err, data) => {
-        document.querySelector('#note').innerHTML = err ? 'Welcome to mini note!' : data;
+        document.querySelector('#note').innerHTML = err ? 'Type here' : data;
       });
     });
 

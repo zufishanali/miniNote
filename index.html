@@ -10,6 +10,7 @@
   <!-- This is a comment -->
   <div id="note" contenteditable></div>
   <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
+  <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
   <script>
     const fs = new Filer.FileSystem();
 
@@ -19,11 +20,13 @@
       });
     });
 
-    const interval = window.setInterval(() => {
-      fs.writeFile('/note', document.querySelector('#note').innerHTML, err => {
-        if (err) throw err;
-      });
-    }, 2500);
+    hotkeys('ctrl+s', (event, handler) => {
+      event.preventDefault();
+        fs.writeFile('/note', document.querySelector('#note').innerHTML, err => {
+          if (err) throw err;
+          else console.log("Saved");
+        });
+    });
 
   </script>
 </body>

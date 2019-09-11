@@ -7,8 +7,10 @@
 </head>
 
 <body>
-  <h2>Welcome to mini note! Ctrl+s to save</h2>
-  <div id="note" contenteditable></div>
+  <h2>Welcome to mini note!</h2>
+  <div id="note" title="Ctrl+s to save" contenteditable></div>
+
+
   <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
   <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
   <script>
@@ -20,12 +22,17 @@
       });
     });
 
+    hotkeys.filter = function (event) {
+      var tagName = (event.target || event.srcElement).tagName;
+      return !(tagName.isContentEditable || tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
+    }
+
     hotkeys('ctrl+s', (event, handler) => {
       event.preventDefault();
-        fs.writeFile('/note', document.querySelector('#note').innerHTML, err => {
-          if (err) throw err;
-          else console.log("Saved");
-        });
+      fs.writeFile('/note', document.querySelector('#note').innerHTML, err => {
+        if (err) throw err;
+        else console.log("Saved");
+      });
     });
 
   </script>

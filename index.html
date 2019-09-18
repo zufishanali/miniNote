@@ -16,14 +16,14 @@
   <script>
     const fs = new Filer.FileSystem();
 
-    window.addEventListener('DOMContentLoaded', (event) => {
+    window.addEventListener('DOMContentLoaded', event => {
       fs.readFile('/note', 'utf8', (err, data) => {
         document.querySelector('#note').innerHTML = err ? 'Type here' : data;
       });
     });
 
-    hotkeys.filter = function (event) {
-      var tagName = (event.target || event.srcElement).tagName;
+    hotkeys.filter = event => {
+      const tagName = (event.target || event.srcElement).tagName;
       return !(tagName.isContentEditable || tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
     }
 

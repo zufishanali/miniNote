@@ -1,0 +1,12 @@
+.center {
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  padding: 10px;
+  padding-bottom: 50px;
+}
+
+.left{
+  text-align:left;
+  left: 20px;
+}

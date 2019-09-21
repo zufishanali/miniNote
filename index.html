@@ -11,10 +11,11 @@
 </head>
 
 <body>
+  <button type='button' onclick="newNote()">New Note</button>
   <div class="sm-16 col">
     <div class="center paper">
       <h2>Welcome to mini note!</h2>
-      <div class="border border-primary left" id="note" title="Ctrl+s to save" contenteditable></div>
+      <div class="border border-primary left notes" id="note" title="Ctrl+s to save" contenteditable>type here</div>
     </div>
   </div>
 
@@ -23,10 +24,28 @@
   <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
   <script>
     const fs = new Filer.FileSystem();
+    
+    newNote = () => {
+      const note = ` 
+        <div class="sm-16 col">
+          <div class="center paper">
+            <h2 contenteditable>Untitled</h2>
+            <div class="border border-primary left notes" title="Ctrl+s to save" contenteditable>type here</div>
+          </div>
+        </div>`;
+      
+      document.body.innerHTML += note;
+    }
+
 
     window.addEventListener('DOMContentLoaded', event => {
       fs.readFile('/note', 'utf8', (err, data) => {
-        document.querySelector('#note').innerHTML = err ? 'Type here' : data;
+        
+        if (err) {
+          window.alert('could not load data!');
+        } else {
+           document.body.innerHTML = data.length > 0 ? data : document.body.innerHTML;
+        }
       });
     });
 
@@ -37,7 +56,7 @@
 
     hotkeys('ctrl+s', (event, handler) => {
       event.preventDefault();
-      fs.writeFile('/note', document.querySelector('#note').innerHTML, err => {
+      fs.writeFile('/note', document.body.innerHTML, err => {
         if (err) throw err;
         else console.log("Saved");
       });

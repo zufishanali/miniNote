@@ -15,7 +15,7 @@
   <div class="sm-16 col">
     <div class="center paper">
       <h2>Welcome to mini note!</h2>
-      <div class="border border-primary left" id="note" title="Ctrl+s to save" contenteditable>type here</div>
+      <!-- <div class="border border-primary left" id="note" title="Ctrl+s to save" contenteditable>type here</div> -->
     </div>
   </div>
 
@@ -24,7 +24,7 @@
   <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
   <script>
     const fs = new Filer.FileSystem();
-    
+    const start = '<!--[[---start-mini-note-record---]]--->';
     newNote = () => {
       const note = ` 
         <div class="sm-16 col">
@@ -44,7 +44,11 @@
         if (err) {
           window.alert('could not load data!');
         } else {
-           document.body.innerHTML = data.length > 0 ? data : document.body.innerHTML;
+           
+           if (data.includes(start)) {
+             newData = data.replace(start,'');
+             document.body.innerHTML = newData;
+           }
         }
       });
     });
@@ -56,7 +60,8 @@
 
     hotkeys('ctrl+s', (event, handler) => {
       event.preventDefault();
-      fs.writeFile('/note', document.body.innerHTML, err => {
+      console.log(start+document.body.innerHTML+end)
+      fs.writeFile('/note',(start+document.body.innerHTML+end), err => {
         if (err) throw err;
         else console.log("Saved");
       });

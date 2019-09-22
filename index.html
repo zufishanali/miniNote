@@ -29,7 +29,10 @@
       <div class="border border-primary left" id="note" title="Ctrl+s to save" contenteditable></div>
       <p style="color: red; text-align:centre;font-weight: bolder;">
         To save use CTRL+S
-      </p>    
+      </p>
+      <div id="notes">
+
+      </div>    
     </div>
 
     <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
@@ -46,17 +49,17 @@
           </div>
         </div>`;
 
-        document.body.innerHTML += note;
+        document.querySelector("#notes").innerHTML += note;
       };
 
       window.addEventListener('DOMContentLoaded', (event) => {
-        fs.readFile('/note', 'utf8', (err, data) => {
+        fs.readFile('/notes', 'utf8', (err, data) => {
           if (err) {
             window.alert('could not load data!');
           } else {
             if (data.includes(start)) {
               newData = data.replace(start, '');
-              document.body.innerHTML = newData;
+              document.querySelector("#notes").innerHTML += newData;
             }
           }
         });
@@ -74,7 +77,7 @@
 
       hotkeys('ctrl+s', (event, handler) => {
         event.preventDefault();
-        fs.writeFile('/note', start + document.body.innerHTML, (err) => {
+        fs.writeFile('/notes', start + document.querySelector("#notes").innerHTML, (err) => {
           if (err) throw err;
           else console.log('Saved');
         });

@@ -1,5 +1,16 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css"
+    />
+    <link rel="stylesheet" href="./index.css" />
+    <title>mini note</title>
+  </head>
 
 <head>
   <meta charset="utf-8">
@@ -11,42 +22,65 @@
 </head>
 
 <body>
+  <button type="button" onclick="newNote()">New Note</button>
   <div class="sm-16 col">
     <div class="center paper">
       <h2>Welcome to mini note!</h2>
-      <div class="border border-primary left" id="note" title="Ctrl+s to save" contenteditable></div>
       <p style="color: red; text-align:centre;font-weight: bolder;">
         To save use CTRL+S
-      </p>    
+      </p>
+      <div id="notes">
+
+      </div>    
     </div>
-  </div>
 
+    <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
+    <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+    <script>
+      const fs = new Filer.FileSystem();
+      const start = '<!--[[---start-mini-note-record---]]--->';
+      newNote = () => {
+        const note = ` 
+        <div class="sm-16 col">
+          <div class="center paper">
+            <h2 contenteditable>Untitled</h2>
+            <div class="border border-primary left" title="Ctrl+s to save" contenteditable>type here</div>
+          </div>
+        </div>`;
 
-  <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
-  <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
-  <script>
-    const fs = new Filer.FileSystem();
+        document.querySelector("#notes").innerHTML += note;
+      };
 
-    window.addEventListener('DOMContentLoaded', event => {
-      fs.readFile('/note', 'utf8', (err, data) => {
-        document.querySelector('#note').innerHTML = err ? 'Type here' : data;
+      window.addEventListener('DOMContentLoaded', (event) => {
+        fs.readFile('/notes', 'utf8', (err, data) => {
+          if (err) {
+            window.alert('could not load data!');
+          } else {
+            if (data.includes(start)) {
+              newData = data.replace(start, '');
+              document.querySelector("#notes").innerHTML += newData;
+            }
+          }
+        });
       });
-    });
 
-    hotkeys.filter = event => {
-      const tagName = (event.target || event.srcElement).tagName;
-      return !(tagName.isContentEditable || tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
-    }
+      hotkeys.filter = (event) => {
+        const tagName = (event.target || event.srcElement).tagName;
+        return !(
+          tagName.isContentEditable ||
+          tagName == 'INPUT' ||
+          tagName == 'SELECT' ||
+          tagName == 'TEXTAREA'
+        );
+      };
 
-    hotkeys('ctrl+s', (event, handler) => {
-      event.preventDefault();
-      fs.writeFile('/note', document.querySelector('#note').innerHTML, err => {
-        if (err) throw err;
-        else console.log("Saved");
+      hotkeys('ctrl+s', (event, handler) => {
+        event.preventDefault();
+        fs.writeFile('/notes', start + document.querySelector("#notes").innerHTML, (err) => {
+          if (err) throw err;
+          else console.log('Saved');
+        });
       });
-    });
-
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>

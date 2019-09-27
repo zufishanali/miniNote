@@ -54,7 +54,8 @@
       window.addEventListener('DOMContentLoaded', (event) => {
         fs.readFile('/notes', 'utf8', (err, data) => {
           if (err) {
-            window.alert('could not load data!');
+            newNote();
+            console.log('Could not load data!');
           } else {
             if (data.includes(start)) {
               newData = data.replace(start, '');
